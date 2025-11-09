@@ -18,3 +18,4 @@ different q types
  - which game was least to most selling generally in order
  - questions with multiple answers 
  - variable amount of potential answers (2-5)
+ - true or false
