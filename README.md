@@ -1,6 +1,13 @@
 # 2025-.Py-project
 making an application based off 
-THIS:https://www.kaggle.com/datasets/ulrikthygepedersen/video-games-sales
+THIS: https://www.kaggle.com/datasets/ulrikthygepedersen/video-games-sales
+
+
+
+
+coded in .py 
 
 a pop quiz app about video games 
 two birds one stone because it will be engaging with the class during presentation 
+
+5 answers per question (in a high to low order, sorted out of the dataset.) 
