@@ -5,12 +5,18 @@ THIS: https://www.kaggle.com/datasets/ulrikthygepedersen/video-games-sales
 
 
 
-coded in .py 
+coded in .py
 
-a pop quiz app about video games 
-two birds one stone because it will be engaging with the class during presentation 
+feature 1: 
+- make user type in said game, this results in charts that display the sales in different regions and other stats that are related to the game
 
-5 answers per question (in a high to low order, sorted out of the dataset.) 
+- user friendly appearance, style accordingly
+
+feature 2: 
+
+syntax: "which [game] was most popular in [game_year_stats (etc,etc)]" 
+
+5 answers per game (in a high to low order, sorted out of the dataset.) 
 should make some cool graphing object that can graph the popularity of the game over given time period
 
 different q types 
