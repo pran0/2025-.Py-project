@@ -27,3 +27,5 @@ different q types
  - questions with multiple answers 
  - variable amount of potential answers (2-5)
  - true or false
+
+I meant that we discard the game idea and just do the graph thing - tony
