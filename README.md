@@ -10,6 +10,8 @@ coded in .py
 feature 1: 
 - make user type in said game, this results in charts that display the sales in different regions and other stats that are related to the game
 
+- we could make it into a bar chart. Each bar representing sales in an according area, for games released on multiple consoles we will have to either make multiple seperate bar charts or overlapping bar charts
+
 - user friendly appearance, style accordingly
 
 feature 2: 
