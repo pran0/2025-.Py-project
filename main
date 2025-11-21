@@ -1,0 +1,48 @@
+function main () 
+dtb = videogames.csv 
+
+while true
+display main menu()
+choice = get user input()
+
+// user can either press a button or enter a number based on project limitations
+
+buttom 1 - feature 1 summary and graph(dtb)
+button 2 - feature 2 search and filter (dtb)
+button 3 - feature 3 recommend a game(dtb, selected game
+button 4 - feature 4 leaderboard(dtb)
+
+exit button (print "quitting program" and break)
+end while
+end function
+
+
+function load_game_data(dtb) 
+
+open filter
+read lines
+
+game list = [] 
+
+for every line except the header
+split line by the comma
+
+create a dictionary: {
+
+    "rank": int,
+    "name": string,
+    "platform": string,
+    "year": int,
+    "genre": string,
+    "publisher": string,
+    "na_sales": float,
+    "eu_sales": float,
+    "jp_sales": float,
+    "other_sales": float,
+    "global_sales": float
+}
+
+game list is read from the dictionary
+
+return game list
+end function
