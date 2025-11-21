@@ -1,0 +1,39 @@
+function feature1(dtb)
+
+user input options:
+
+1. summary of a genre
+2. summary of a game
+3. compare games
+
+choice = user input
+
+if choice = 1 
+genre = input(enter genre)
+data = sort games where genre = genre
+
+print total games: count(data)
+print avg,na,eu,jp sales
+
+elif choice = 2
+gamename = input(name)
+game = game in dtb
+
+display sales breakdown
+show game sale graph(game)
+
+elif choice = 3
+game1
+game2
+
+find game1, game2 in dtb
+create comparison graph(game1, game2) multiple bars in one graph
+
+else 
+print invalid choice
+
+function avgsales(dtb):
+sum = 0
+    for game in dtb:
+        sum += game["global sales"]
+    return sum/count(dtb)
