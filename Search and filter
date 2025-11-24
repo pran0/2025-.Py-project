@@ -1,0 +1,38 @@
+function feature2(dtb)
+
+user input options: 
+- search by name - 1
+- search by platform - 2
+- search by genre - 3 
+- search by publisher - 4 
+- apply filter (year, min sales etc)
+
+choice = get user input
+
+if choice == 1 
+    name = input(game name)
+    results = filter by substring match
+
+elif choice == 2
+    platform = input(platform)
+    results = filter where platform matches
+
+elif choice == 3
+    genre = input(genre)   
+    results = filter where game(genre) = genre
+
+elif choice ==4 
+    publisher = input(publisher)
+    results = filter where game(publisher) = publisher
+
+elif choice == 5
+    min_year = get input
+    max_year = get inout
+    min_sales = ask user
+
+    results = filter where:
+        game(year) between min_year and max_year
+        AND game(global_sales) >= min_sales
+    
+print_results_in_table(results)
+
