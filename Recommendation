@@ -1,0 +1,18 @@
+function feature(dtb)
+gamename = input()
+
+selected = find game with that name
+
+for game in dtb:
+x=0
+
+if game [genre] = selected[genre]:
+x += 2
+
+if game[platform] = selected[platform] :
+x += 1
+
+take top 5
+display
+
+end function
