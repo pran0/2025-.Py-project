@@ -37,3 +37,4 @@ sum = 0
     for game in dtb:
         sum += game["global sales"]
     return sum/count(dtb)
+end function
