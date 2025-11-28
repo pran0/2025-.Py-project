@@ -36,3 +36,4 @@ elif choice == 5
     
 print_results_in_table(results)
 
+end function
