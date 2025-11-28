@@ -1,0 +1,19 @@
+function feature4(dtb)
+
+region = input()
+
+year = input()
+
+sorted = []
+
+for game in dtb:
+    if game[year] in range and region and exists:
+    add game to sorted
+
+sort list{sorted} by regionSales decending order
+
+print[top 5 games from sorted]
+
+return sorted list of dtb
+
+end function
