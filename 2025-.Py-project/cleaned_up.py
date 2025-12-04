@@ -48,6 +48,7 @@ Other_sales_values = [float(x) for x in Other_sales]
 Global_sales_values = [float(x) for x in Global_sales]
 
 def recommend():
+    #This block is complete I ran it and it works
     question = input("Do you want to enter a game name(Y)? or Do you want to some to be recommended to you(N)?:")
     if question == "Y":
         selected_name = input("Enter the name of the game: ")
@@ -65,7 +66,7 @@ def recommend():
                 print("Okay that's fine")
             else:
                 print("")
-
+#This block is not complete thats why i said it's still under construction if i can I'll edit again but for now I am still thinking
     elif question == "N":
         #This selectes all apperances of the action genre in the dataset and converts it to an array that has the index
         genre_type = "Action"
