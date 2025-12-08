@@ -14,34 +14,33 @@ import feature3
 
 file_path = 'games.csv'  #path to the csv file
 
-def init(file_path): #defining a function to load the data from the csv file
-    games= [] #creating an empty dictionary to store the data
+def init(file_path):
+    games = []
 
-    with open(file_path, 'r', encoding="utf-8") as file: #read the csv file not write, then pass in the file so that it can be read
-        reader = csv.DictReader(file) #DictReader reads each row and creats a dictionary
+    with open(file_path, 'r', encoding="utf-8") as file:
+        reader = csv.DictReader(file)
 
-
-    #now iterate through each row of games.csv
         for row in reader:
             try:
-                game = { #each row must be validated so all values are of same data type, as well as some input validation
-                    'Title': row['name'],  # name → Title
-                    'Platform': row['platform'],  
-                    'Year_of_Release': int(row['year']) if row['year'] else None,
-                    'Genre': row['genre'],
-                    'Publisher': row['publisher'],
+                game = {
+                    'Title': row['name'].strip(),
+                    'Platform': row['platform'].strip(),
+                    'Year_of_Release': int(float(row['year'])) if row['year'] else None,
+                    'Genre': row['genre'].strip(),
+                    'Publisher': row['publisher'].strip(),
                     'NA_Sales': float(row['na_sales']) if row['na_sales'] else 0.0,
                     'EU_Sales': float(row['eu_sales']) if row['eu_sales'] else 0.0,
                     'JP_Sales': float(row['jp_sales']) if row['jp_sales'] else 0.0,
                     'Other_Sales': float(row['other_sales']) if row['other_sales'] else 0.0,
                     'Global_Sales': float(row['global_sales']) if row['global_sales'] else 0.0,
                 }
-        
-                games.append(game) #append each game to the games list
-            except ValueError:
 
-                continue 
-    return games #return the list of games
+                games.append(game)
+
+            except ValueError:
+                continue
+
+    return games
 
 #------------------------
 # function: display_main_menu
@@ -103,7 +102,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
