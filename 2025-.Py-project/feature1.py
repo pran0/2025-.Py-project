@@ -1,14 +1,20 @@
+# feature1.py — Sales Visualization System
+
 import csv
 import matplotlib.pyplot as plt
 import sys
 
 # defines the columns the script will use 
-FILE_PATH = 'C:/Users/tluka/OneDrive/Desktop/video_games_sales.csv'
-GAME_COLUMN_HEADER = 'name'      # the column header for the game title
-PLATFORM_COLUMN_HEADER = 'platform' # the column header for the platform
-SALES_COLUMNS_HEADERS = ['na_sales', 'eu_sales', 'jp_sales', 'other_sales', 'global_sales']
-REGION_LABELS = ['North America', 'Europe', 'Japan', 'Other', 'global']
+# NOTE: these are *logical* names; we handle both raw and processed keys in code.
+GAME_COLUMN_HEADER = 'Title'        # logical title field
+PLATFORM_COLUMN_HEADER = 'Platform' # logical platform field
+# logical sales headers (we'll map from either raw or processed)
+SALES_COLUMNS_HEADERS = ['NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales', 'Global_Sales']
+REGION_LABELS = ['North America', 'Europe', 'Japan', 'Other', 'Global']
 
+FILE_PATH = 'games.csv'   # updated to relative path for GUI + CLI compatibility
+
+# platform → color mapping (kept exactly as you wrote)
 PLATFORM_COLORS = {
 
     # --- Atari & Other Classics ---
@@ -20,7 +26,7 @@ PLATFORM_COLORS = {
     'N64': 'rebeccapurple', # Nintendo 64
     'GC': 'mediumorchid',   # GameCube
     'Wii': 'skyblue',       # Wii
-    'WiiU': 'dodgerblue',    # Wii U
+    'WiiU': 'dodgerblue',   # Wii U
     'DS': 'darkblue',       # Nintendo DS
     '3DS': 'deeppink',      # Nintendo 3DS
     'GB': 'gold',           # Game Boy
@@ -60,107 +66,139 @@ PLATFORM_COLORS = {
 
 
 def load_data(file_path):
-   # converts csv data into a list of dictionaries
+    """
+    Converts CSV rows into a list of dictionaries.
+    For CLI use. In the GUI we normally pass in already-processed rows from loader.init().
+    
+    This version is tolerant: it will work whether the CSV headers use
+    lower_snake_case (name, na_sales, ...) or your processed form.
+    """
     data = []
     try:
         with open(file_path, mode='r', newline='', encoding='utf-8') as file:
-            # treats each row as a dictionary where keys are the headers
             reader = csv.DictReader(file)
             for row in reader:
-                # remove rows with missing data
-                if row.get(GAME_COLUMN_HEADER) and row.get(PLATFORM_COLUMN_HEADER):
-                    data.append(row)
-                    # if anything wrong happens with loading csv file, lowkey threw this in just for an excuse to use except
+                # require some kind of name + platform
+                name = row.get('name') or row.get('Title')
+                platform = row.get('platform') or row.get('Platform')
+                if not name or not platform:
+                    continue
+
+                # normalise into the processed schema used everywhere else
+                fixed_row = {
+                    'Title': (row.get('Title') or row.get('name') or '').strip(),
+                    'Platform': (row.get('Platform') or row.get('platform') or '').strip(),
+                    'NA_Sales': float(row.get('NA_Sales') or row.get('na_sales') or 0) ,
+                    'EU_Sales': float(row.get('EU_Sales') or row.get('eu_sales') or 0) ,
+                    'JP_Sales': float(row.get('JP_Sales') or row.get('jp_sales') or 0) ,
+                    'Other_Sales': float(row.get('Other_Sales') or row.get('other_sales') or 0),
+                    'Global_Sales': float(row.get('Global_Sales') or row.get('global_sales') or 0),
+                }
+                data.append(fixed_row)
+
         print(f"Data loaded successfully from {file_path}. Total rows: {len(data)}")
         return data
+
     except FileNotFoundError:
-        print(f" Error: CSV file not found at {file_path}. Please check the path.")
+        print(f"Error: CSV file not found at {file_path}.")
         sys.exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred during file loading: {e}")
-        sys.exit(1) 
+        print(f"Unexpected error while loading CSV: {e}")
+        sys.exit(1)
+
 
 def filter_game_data(data, game_name):
-    # scans the list of dictionaries for all rows matching the input game name
+    """
+    Returns list of rows where the game name matches (case-insensitive).
+    - Here we allow both exact match AND partial match (quality-of-life).
+    - Uses either 'Title' or 'name' depending on what exists.
+    """
     filtered_data = []
-    # removes the importance of case sensitivity
-    normalized_game_name = game_name.lower().strip()
-    
+    normalized = game_name.lower().strip()
+
     for row in data:
-        # checks row contains the column and if value matches input
-        game_title = row.get(GAME_COLUMN_HEADER, '').lower().strip()
-        if game_title == normalized_game_name:
+        # be tolerant: look for either 'Title' or 'name'
+        title_value = row.get('Title') or row.get('name') or ''
+        title = title_value.lower().strip()
+        # allow substring match so "mario" will find "Super Mario Bros"
+        if normalized in title:
             filtered_data.append(row)
-            # if no game is found
+
     if not filtered_data:
-        print(f"\nNo sales data found for game: '{game_name}'.")
-        print("Please check the spelling or try a different game.")
+        print(f"\nNo sales data found for '{game_name}'.")
         return None
-    
-    print(f"\nFound {len(filtered_data)} platform release(s) for '{game_name}'.")
+
+    print(f"Found {len(filtered_data)} entries for '{game_name}'.")
     return filtered_data
 
+
 def prepare_for_plot(filtered_data):
+    """
+    Convert numeric sales fields into floats.
+    Group by platform.
+    Tolerant to both raw (na_sales) and processed (NA_Sales) keys.
+    """
+    plot_data = {}
 
-    # structures the filtered data for matplotlib converts sales figures to floats and organizes data by platform
-
-    plot_data = {} # key: platform (str), value: List of 5 sales figures (float)
-    
     for row in filtered_data:
-        platform = row[PLATFORM_COLUMN_HEADER]
+        # platform can be 'Platform' or 'platform'
+        platform = row.get('Platform') or row.get('platform') or 'Unknown'
+
         sales_values = []
-        
-        for col in SALES_COLUMNS_HEADERS:
+        for logical_col in SALES_COLUMNS_HEADERS:
+            # map logical 'NA_Sales' to possible keys in the data
+            # e.g. 'NA_Sales' or 'na_sales'
+            upper_key = logical_col
+            lower_key = logical_col.lower()
+
             try:
-                # converts sales string  values to floats (handling potential empty strings or None)
-                sales_str = row.get(col, '0.0')
-                if sales_str == '': # treats empty string as 0
-                     sales_values.append(0.0)
-                else:
-                    sales_values.append(float(sales_str))
-            except ValueError:
-                # if conversion fails set to zero
-                sales_values.append(0.0) 
-        
+                raw_val = row.get(upper_key)
+                if raw_val is None:
+                    raw_val = row.get(lower_key)
+
+                value = float(raw_val) if raw_val not in (None, '') else 0.0
+                sales_values.append(value)
+            except (ValueError, TypeError):
+                sales_values.append(0.0)
+
         plot_data[platform] = sales_values
-    
+
     return plot_data
 
+
 def create_bar_chart(plot_data, game_name):
-    
-    
-    # lines 129-141 makes the bar chart readable and consistent throughout entries of different games and platforms 
+    """
+    Creates the matplotlib bar chart.
+    GUI will display normally using plt.show().
+    """
 
     platforms = list(plot_data.keys())
     num_platforms = len(platforms)
     num_regions = len(SALES_COLUMNS_HEADERS)
-    
-    x_pos = list(range(num_regions)) 
 
-    # bar width 0.8 cause if there is only 1 platform and bar width = 1 it theres no disconnection between bars in different regions
-    bar_width = 0.8 / num_platforms 
-    
+    x_pos = list(range(num_regions))
+    # bar width 0.8 cause if there is only 1 platform and bar width = 1 it theres no disconnection
+    bar_width = 0.8 / num_platforms
+
     fig, ax = plt.subplots(figsize=(12, 6))
-    
+
     # iterates through each platform to draw a set of bars through 5 base values (the sales)
     for i, platform in enumerate(platforms):
         sales = plot_data[platform]
-        
+
         # looks up colour in the dictionary for the specicfic platform graphed
         color = PLATFORM_COLORS.get(platform, PLATFORM_COLORS['DEFAULT'])
-        
+
         offset = (i - num_platforms / 2 + 0.5) * bar_width
-        
-        # tells the colour to the ax.bar function
+
         ax.bar(
             [pos + offset for pos in x_pos],
-            # applies colour, bar width, sales and platforms here
             sales,
             bar_width,
             label=platform,
-            color=color 
+            color=color
         )
-        
+
     # chart formatting 
     ax.set_xticks(x_pos)
     ax.set_xticklabels(REGION_LABELS)
@@ -169,30 +207,26 @@ def create_bar_chart(plot_data, game_name):
     ax.set_ylabel('Sales (in millions)', fontsize=12)
     ax.legend(title='Platform', loc='upper right')
     ax.grid(axis='y', linestyle='--', alpha=0.7)
-    
-    # line 173 prevents overlapping of each individual bar just makes it look a whole lot cleaner and not look like shit
 
     plt.tight_layout()
-    plt.show() # displays chart
+    plt.show()  # displays chart
 
-# main execution block
-if __name__ == "__main__":
-    # loads dataset
-    full_data = load_data(FILE_PATH)
-    
-    while True:
-        # get user input
-        game_name_input = input("\nEnter a video game or 'exit' to quit: ")
-        if game_name_input.lower() == 'exit':
-            print("Thank you for using the Game Sales Visualizer. ")
-            break
 
-        # filters data for requested game
-        game_data = filter_game_data(full_data, game_name_input)
-        
-        if game_data is not None:
-            # prepares data for plotting
-            plot_data = prepare_for_plot(game_data)
-            
-            # generates and show the bar chart
-            create_bar_chart(plot_data, game_name_input)
+# -----------------------------------------------------
+# NEW: GUI-friendly wrapper (minimal modification)
+# -----------------------------------------------------
+def run_gui_feature1(full_data, game_name):
+    """
+    GUI wrapper for Feature 1.
+    full_data is expected to be a list of dicts (either raw CSV rows OR init() output).
+    Returns True if successful, False if game not found.
+    """
+    filtered = filter_game_data(full_data, game_name)
+    if filtered is None:
+        return False
+
+    plot_data = prepare_for_plot(filtered)
+    create_bar_chart(plot_data, game_name)
+
+    return True
+# -----------------------------------------------------
