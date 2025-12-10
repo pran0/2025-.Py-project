@@ -2,29 +2,102 @@
 making an application based off 
 THIS: https://www.kaggle.com/datasets/ulrikthygepedersen/video-games-sales
 
+# 🎮 Video Game Sales Analysis & Recommendation System  
+A Python application that loads, analyzes, and visualizes global video game data using multiple interactive features.  
+The system includes:
 
+- A full **Graphical User Interface (GUI)** built with Tkinter  
+- A **console menu** for terminal-based interaction  
+- Search tools, recommendation algorithms, sales visualisation, and leaderboard generation  
 
+---
 
-coded in .py
+## 📌 Project Overview
 
-feature 1: 
-- a summary / analysis of a genre or game, shown in the form of a graph, also being able to compare games on the same graph.
+This project solves a common problem:
 
-feature 2: 
-- Game search and filteriring system - search for games by name, platform, genre or publisher
--filter by year, and minimum sales
+> **"How can we explore and understand video game sales data quickly, visually, and interactively?"**
 
-feature 3: 
-- recommendation feature, make user select a game, and this will list games similar to said game
-- match by genre, platform, potentially sales
+Users often face large datasets that are difficult to navigate manually.  
+This program provides an accessible way to:
 
-feature 4: 
--Leaderboard mode that can display the top 5 games in said region between
+- Search for games  
+- Compare sales across different regions  
+- Discover similar games  
+- Visualize sales performance  
+- View top-selling games in each region  
 
-syntax: "which [game] was most popular in [game_year_stats (etc,etc)]" 
+Whether you're researching trends, completing data analysis coursework, or just exploring gaming history — this tool makes the process simple and intuitive.
 
+---
 
-UI:
-- user friendly appearance, style accordingly
-- make use of containers, graphic colors, visually appealing. 
+## 🧩 Features
+
+### **Feature 1 — Sales Visualisation (Graphs)**
+Generates a multi-platform sales bar chart for a selected video game.  
+Shows sales breakdown across:
+
+- North America  
+- Europe  
+- Japan  
+- Other regions  
+- Global totals  
+
+This feature helps users understand:
+
+- How a game's sales differ across the world  
+- How different platform releases compare  
+- Market performance trends  
+
+---
+
+### **Feature 2 — Search & Filtering**
+Search the dataset using:
+
+- Game name (partial or full match)  
+- Genre  
+- Platform  
+- Publisher  
+- Year / Sales filters (console version)  
+
+Returns the **top 5 results** sorted by global sales.  
+Useful for quickly finding highly successful games in specific categories.
+
+---
+
+### **Feature 3 — Game Recommendations**
+Given a game title, this feature recommends up to **five similar games** by comparing:
+
+- Genre (strong match)
+- Platform (medium match)
+- Global sales (within a close range)
+
+Useful for users who want to discover games similar to their favorites.
+
+---
+
+### **Feature 4 — Top 5 Games by Region**
+Displays the top-selling games in:
+
+- North America  
+- Europe  
+- Japan  
+- Other regions  
+- Global market  
+
+This feature gives useful insights into regional gaming preferences and market behavior.
+
+---
+
+## 🖥 Graphical Interface (GUI)
+
+The GUI is built using **Tkinter** and includes four tabs:
+
+1. **Sales Analysis** (Feature 1)  
+2. **Search** (Feature 2)  
+3. **Recommendations** (Feature 3)  
+4. **Leaderboards** (Feature 4)  
+
+Everything is responsive, clean, and easy to navigate. 
+
 
