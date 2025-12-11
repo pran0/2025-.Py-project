@@ -75,7 +75,7 @@ def load_data(file_path):
     Crucially, it's forgiving: it works whether the original headers are 'Title' or 'name', 
     'NA_Sales' or 'na_sales', and makes sure all sales numbers are actual decimal values.
     """
-    data = [] # This is where we'll keep all the game records once they're processed.
+    data = [] 
     
     try:
         # open the file and use utf-8 encoding to handle all kinds of characters. utf-8 converts characters to binary so its easier for the program to read
@@ -92,13 +92,13 @@ def load_data(file_path):
                 if not name or not platform:
                     continue
 
-                # Ncreates a standardized dictionary structure that the rest of our script expects
+                # creates a standardized dictionary structure that the rest of our script expects
                 fixed_row = {
-                    # Get the title and platform cleaning up whitespace too
+                    # get title and platform cleaning up whitespace too
                     'Title': (row.get('Title') or row.get('name') or '').strip(),
                     'Platform': (row.get('Platform') or row.get('platform') or '').strip(), 
 
-                    # Convert every sales field to a float. If the field is empty, treat it as 0. done this just incase anything was wrong w the csv data
+                    # convert every sales field to a float if field is empty, treat it as 0. done this just incase anything was wrong w the csv data
                     'NA_Sales': float(row.get('NA_Sales') or row.get('na_sales') or 0),
                     'EU_Sales': float(row.get('EU_Sales') or row.get('eu_sales') or 0),
                     'JP_Sales': float(row.get('JP_Sales') or row.get('jp_sales') or 0),
@@ -156,7 +156,7 @@ def prepare_for_plot(filtered_data):
     
     It groups all the sales figures by platform, making it easy to pass to the plotting function.
     """
-    plot_data = {} # a dictionary key = platform, value = a list of its 5 regional sales figures
+    plot_data = {} # a dictionary. key = platform, value = a list of its 5 regional sales figures
 
     for row in filtered_data:
         # gets platform name
