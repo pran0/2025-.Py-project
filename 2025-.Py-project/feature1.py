@@ -80,7 +80,7 @@ def load_data(file_path):
     try:
         # open the file and use utf-8 encoding to handle all kinds of characters. utf-8 converts characters to binary so its easier for the program to read
         with open(file_path, mode='r', newline='', encoding='utf-8') as file:
-            # DictReader is great because it gives us dictionaries right away, using the column headers as keys
+            # DictReader is great cause it gives us dictionaries right away, using the column headers as keys
             reader = csv.DictReader(file)
             
             for row in reader:
@@ -226,7 +226,7 @@ def create_bar_chart(plot_data, game_name):
             color=color                      # platform color
         )
 
-    # --- Chart Styling ---
+    # chart Styling
     ax.set_xticks(x_pos)                  # Put the labels under the correct group of bars.
     ax.set_xticklabels(REGION_LABELS)     # Use our friendly region names for the labels.
     ax.set_title(f'Regional Sales Distribution for: {game_name}', fontsize=16)
@@ -264,10 +264,10 @@ def run_gui_feature1(full_data, game_name):
     if filtered is None:
         return False
 
-    # 2. structures data for the chart
+    # structures data for the chart
     plot_data = prepare_for_plot(filtered)
     
-    # 3. creates and shows chart
+    # creates and shows chart
     create_bar_chart(plot_data, game_name)
 
     return True # finally done hooray
