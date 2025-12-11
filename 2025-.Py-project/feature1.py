@@ -7,7 +7,7 @@ import sys                      # if an errors were to occur it just helps exit 
 
 # tells the script what we want the important columns to be called
 GAME_COLUMN_HEADER = 'Title'        
-PLATFORM_COLUMN_HEADER = 'Platform' .
+PLATFORM_COLUMN_HEADER = 'Platform' 
 
 # defines the 5 sales regions that will eventually be used for the x axis
 SALES_COLUMNS_HEADERS = ['NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales', 'Global_Sales']
